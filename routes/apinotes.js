@@ -4,13 +4,26 @@ const fs = require('fs');
 const util = require('util');
 
 //promise version of fs.readfile
-const readFromFile = util.promisify(fs.readFile);
 
+
+//get api route
+
+notes.get('/', (req, res) => {
+    //log a get request
+    console.info(`${req.method} request recieved for notes`)
+    //read from db.json file and return the data
+    fs.readFile('./db/db.json').then((data)=>
+    res.json(JSON.parse(data)));
+})
+
+//post api route
 notes.post('/', (req, res)=> {
     console.info(`${req.method} request recieved for notes`)
-    console.log(req.body);
+    
+
     //obj destructuring setting title and text as variables
     const { title, text } = req.body;
+
     //if req.body has content, create a new object from the body called newNote
     if (req.body) {
         const newNote = {
@@ -19,7 +32,7 @@ notes.post('/', (req, res)=> {
             id: createUniqueID(),
         };
     //read from the database json to compile the array of objects to contain the notes then write the newNote to the file
-        readFromFile('./db/db.json', 'utf8', (err, data) => {
+        fs.readFile('./db/db.json', 'utf8', (err, data) => {
             if (err) {
             console.error(err);
             } else {

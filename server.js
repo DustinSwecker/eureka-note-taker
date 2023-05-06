@@ -9,11 +9,11 @@ const api = require ('./routes/index');
 //grab constructed ID
 const uuid = require('./helpers/uuid');
 
-//set PORT
-const PORT = process.env.PORT || 3590;
-
 //as per express documentation, adding app variable to activate express scripts
 const app = express();
+
+//set PORT
+const PORT = process.env.PORT || 3590;
 
 
 // Middleware for parsing JSON and urlencoded form data
