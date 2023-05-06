@@ -12,8 +12,13 @@ notes.get('/', (req, res) => {
     //log a get request
     console.info(`${req.method} request recieved for notes`)
     //read from db.json file and return the data
-    fs.readFile('./db/db.json').then((data)=>
-    res.json(JSON.parse(data)));
+    fs.readFile('./db/db.json','utf8', (err, data) => {
+        if (err) {
+        console.error(err);
+        } else {
+    res.json(JSON.parse(data));
+        };
+    });
 })
 
 //post api route
