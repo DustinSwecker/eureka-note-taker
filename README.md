@@ -29,6 +29,8 @@ From there, type the title of your note in the 'Note Title' field and then hit t
 |nol166 |John McCambridge| 
 |Georgeyoo|George|
 
+I borrowed some code to find the index of an object in an array from: https://stackoverflow.com/questions/10557486/in-an-array-of-objects-fastest-way-to-find-the-index-of-an-object-whose-attribu
+
 ## License
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
