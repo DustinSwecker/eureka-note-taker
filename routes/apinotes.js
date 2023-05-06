@@ -1,6 +1,19 @@
 const notes = require('express').Router();
 const { createUniqueID } = require('../helpers/uuid');
 const fs = require('fs');
+const util = require('util');
+
+const readFromFile = util.promisify(fs.readFile);
+
+//get api route
+
+notes.get('/', (req, res) => {
+    //log a get request
+    console.info(`${req.method} request recieved for notes`)
+    //read from db.json file and return the data
+    readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)))
+    
+ });
 
 //post api route
 notes.post('/', (req, res)=> {
@@ -19,16 +32,19 @@ notes.post('/', (req, res)=> {
         };
     //read from the database json to compile the array of objects to contain the notes then write the newNote to the file
         fs.readFile('./db/db.json', 'utf8', (err, data) => {
+            
             if (err) {
             console.error(err);
             } else {
-            const parsedData = JSON.parse(data);
+            var parsedData = JSON.parse(data);
             parsedData.push(newNote);
             fs.writeFile('./db/db.json', JSON.stringify(parsedData, null, 4), (err)=> err ? console.error(err): console.info(`\nData written to db.json`))
-            }
-        });
-    };
-});
+            
+            };
+            });
+        };
+    });
+
 
 
 
@@ -52,21 +68,5 @@ notes.delete('/:id', (req,res) => {
         })
     })
 
-
-
-//get api route
-
-notes.get('/', (req, res) => {
-    //log a get request
-    console.info(`${req.method} request recieved for notes`)
-    //read from db.json file and return the data
-    fs.readFile('./db/db.json','utf8', (err, data) => {
-        if (err) {
-        console.error(err);
-        } else {
-    res.json(JSON.parse(data));
-        };
-    });
-})
 
 module.exports = notes;
