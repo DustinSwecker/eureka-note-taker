@@ -1,18 +1,15 @@
-//connect express, path, fs, and fs utilities
+//connect express, path, and set up routes
 
 const express = require('express');
 const path = require('path');
-const fs = require('fs');
-const util = require('util');
 const api = require ('./routes/index');
 
-//grab constructed ID
-const uuid = require('./helpers/uuid');
 
 //as per express documentation, adding app variable to activate express scripts
 const app = express();
 
 //set PORT
+
 const PORT = process.env.PORT || 3590;
 
 

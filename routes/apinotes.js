@@ -1,25 +1,6 @@
 const notes = require('express').Router();
 const { createUniqueID } = require('../helpers/uuid');
 const fs = require('fs');
-const util = require('util');
-
-//promise version of fs.readfile
-
-
-//get api route
-
-notes.get('/', (req, res) => {
-    //log a get request
-    console.info(`${req.method} request recieved for notes`)
-    //read from db.json file and return the data
-    fs.readFile('./db/db.json','utf8', (err, data) => {
-        if (err) {
-        console.error(err);
-        } else {
-    res.json(JSON.parse(data));
-        };
-    });
-})
 
 //post api route
 notes.post('/', (req, res)=> {
@@ -48,5 +29,44 @@ notes.post('/', (req, res)=> {
         });
     };
 });
+
+
+
+notes.delete('/:id', (req,res) => {
+    console.info(`${req.method} request recieved for notes`);
+    //readfile to grab the existing array of objects
+    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+        if (err) {
+            console.error(err);
+        } else {
+            //variables to suss out the necessary data
+            const parsedData = JSON.parse(data);
+            const ID = req.params.id;
+            //map function to pick out the index of the object that has the matching id borrowed from a  stack overflow answer at https://stackoverflow.com/questions/10557486/in-an-array-of-objects-fastest-way-to-find-the-index-of-an-object-whose-attribu
+            const arrayIndex = parsedData.map(function(x) {return x.id}).indexOf(ID);
+            //removing the item based on the above index number
+            parsedData.splice(arrayIndex,1);
+            //writing the resulting array of objects to the db.json file
+            fs.writeFile('./db/db.json', JSON.stringify(parsedData, null, 4), (err)=> err ? console.error(err): console.info(`\n Data deleted.`))
+            };
+        })
+    })
+
+
+
+//get api route
+
+notes.get('/', (req, res) => {
+    //log a get request
+    console.info(`${req.method} request recieved for notes`)
+    //read from db.json file and return the data
+    fs.readFile('./db/db.json','utf8', (err, data) => {
+        if (err) {
+        console.error(err);
+        } else {
+    res.json(JSON.parse(data));
+        };
+    });
+})
 
 module.exports = notes;
