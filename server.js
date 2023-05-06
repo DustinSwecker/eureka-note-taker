@@ -4,6 +4,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const util = require('util');
+const api = require ('./routes/index');
 
 //grab constructed ID
 const uuid = require('./helpers/uuid');
@@ -15,11 +16,14 @@ const PORT = process.env.PORT || 3590;
 const app = express();
 
 
-//to parse JSON and urlencoded form data
+// Middleware for parsing JSON and urlencoded form data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//setting express to use the /public folder as the starting directory directory
+//to grab the api routes
+app.use('/api', api);
+
+//setting express to use the /public folder as the starting directory
 app.use(express.static('public'));
 
 //get path to return the notes page
